@@ -6,7 +6,7 @@ const apolloLogger = {
     const requestInternals = http[httpSymbols[1]]
     // builds date and string
     const now = new Date()
-    const date = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`
+    const date = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`
 
     const info = `${requestInternals.method} --  ${date}`
     console.log('==========', info, '==========')
