@@ -4,7 +4,7 @@ import os
 """
 This script intakes a provided .env file (eg. development.env) and loads its values into an .env at the root. This is to accomodate some difficulties in directing `docker-compose` to refer to an env other than .env in the root directory.
 
-To run this script, execute 'python3 ../path_to_folder/original_env.env'. Because of the way the project is structured, the script will remove the current root .env file and replace it with a newly generated one. The script does not accept a destination argument, and simply places the .env in the directory above. In this case it's ./ where the script is located in ./utlis.
+To run this script, execute 'python3 ../path_to_folder/original_env.env'. Because of the way the project is structured, the script will remove the current root .env file and replace it with a newly generated one. The script does not accept a destination argument, and simply places the .env in the directory above. In this case it's ./ where the script is located in ./utils.
 """
 
 
