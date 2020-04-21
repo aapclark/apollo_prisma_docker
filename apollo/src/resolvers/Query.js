@@ -1,5 +1,5 @@
 function info() {
-	return 'Welcome to Quality Hub';
+	return 'Welcome to Apollo-Prisma in Docker';
 }
 
 function test(_, __, ___) {
