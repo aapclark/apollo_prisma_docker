@@ -7,7 +7,8 @@ const JWT_SECRET = process.env.PRISMA_SECRET
 
   Creates a token storing user id and email. Expires in 12 hours
 */
-function generateToken(user) {
+export function generateToken(user) {
+
   const payload = {
     id: user.id,
     email: user.email,
@@ -26,7 +27,7 @@ function generateToken(user) {
 
   @return {ID} userId - User ID stored in token
 */
-function getUserId({ request }) {
+export function getUserId({ request }) {
   const authorization = request.get('Authorization')
   if (authorization) {
     const token = authorization.replace('Bearer ', '')
@@ -40,7 +41,7 @@ function getUserId({ request }) {
   Checks the email stored in the token against the saved admin email in an .env file.
 */
 
-function validToken(context) {
+export function validToken(context) {
   const Authorization = context.request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
@@ -59,13 +60,4 @@ function validToken(context) {
     })
   }
   throw new Error('Not Authenticated')
-}
-
-
-
-
-export default {
-  generateToken,
-  getUserId,
-  validToken
 }
