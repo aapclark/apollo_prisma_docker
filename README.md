@@ -74,3 +74,49 @@ Prisma's datamodel specifies a User table in the database. This is structured so
 
 
 ## Operations
+
+
+## Structure
+
+```
+├── apollo
+│   ├── schema
+│   └── src
+│       ├── __tests__
+│       │   ├── config
+│       │   ├── user
+│       │   └── utils
+│       ├── auth
+│       ├── context
+│       ├── generated
+│       │   └── prisma-client
+│       ├── plugins
+│       │   └── apolloLogger
+│       ├── resolvers
+│       │   └── mutation
+│       └── typeDefs
+│           ├── __scaffold__
+│           ├── auth
+│           └── user
+├── configuration
+├── prisma
+└── utils
+```
+
+#### Apollo 
+Apollo Server resides in the /apollo directory.
+##### Sub-Directories
+  - `src` contains the apollo server app
+    - `/__tests__` contains configuration, helper functions (utils), and folders for each test suite.
+    - `/auth` contains helper functions for authenticating users.
+    - `/context` contains function which builds context. If context-level authentication is desired, it can be implemented here.
+    - `/generated` contains the generated Prisma Client
+    - `/plugins` contains any custom plugin used by Apollo Server, like apolloLogger.
+    - `/resolvers` structure is currently a work in progress and will be updated with a structure similar to `typeDefs`
+    - `/typeDefs` contains GraphQL type definitions that Apollo Server can interpret. Each type is represented in a sub-folder which contains input, type, query, and mutation definitions as well as an index to import each folder's definitions and export as default.
+
+#### Prisma
+Prisma configuration and datamodel resides in the /prisma directory.
+
+#### Others
+ENV files can be stored in `/configuration`. The script to write ENV files to root .env is located in `/utils`
