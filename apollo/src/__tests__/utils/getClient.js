@@ -1,9 +1,9 @@
 import ApolloClient from 'apollo-boost'
 
-// TODO -- update URI w/ env
+
 export const getClient = (token) => {
   return new ApolloClient({
-    uri: '',
+    uri: process.env.PRISMA_ENDPOINT,
     request: (operation) => {
       if (token) {
         operation.setContext({
