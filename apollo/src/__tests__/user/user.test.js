@@ -1,6 +1,6 @@
 import { prisma } from '../../generated/prisma-client'
 import { getClient, getAuthenticatedClient } from '../utils/getClient'
-import { registerUser, updateUser, login, deleteUser } from './queries'
+import { registerUser, updateUser, login, deleteUser } from '../queries'
 
 const client = getClient()
 let authenticatedClient
@@ -78,6 +78,19 @@ describe('User authorization tests', () => {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
+
+
+  it('Should reject a request that does not provide proper authentication.', async () => {
+    const res = await client.mutate({
+      mutation: updateUser,
+      variables: {
+        email: 'rejected_email@mail.com',
+        password: 'rejected_password'
+      }
+    })
+
+    console.log(`unauth'd res`, res)
+  })
 
   it('Should return a token when user logs in', async () => {
     const { data } = await client.mutate({

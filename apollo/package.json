@@ -13,8 +13,9 @@
     "globalSetup": "./src/__tests__/config/globalSetup.js",
     "globalTeardown": "./src/__tests__/config/globalTeardown.js",
     "testPathIgnorePatterns": [
-      "./__tests__/config/",
-      "./__tests__/utils/"
+      "src/__tests__/config/",
+      "src/__tests__/utils/",
+      "src/__tests__/queries"
     ]
   },
   "repository": {
