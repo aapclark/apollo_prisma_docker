@@ -1,68 +1,12 @@
-import { gql } from 'apollo-boost'
 import { prisma } from '../../generated/prisma-client'
 import { getClient, getAuthenticatedClient } from '../utils/getClient'
+import { registerUser, updateUser, login, deleteUser } from './queries'
 
 const client = getClient()
 let authenticatedClient
 
 
-const registerUser = gql`
-  mutation register($email: String!, $password: String!) { 
-    register (
-      input: {
-        email: $email
-        password: $password
-      }
-    ) {
-      token
-      user {
-        id
-      }
-    }
-  }
-  `
-const updateUser = gql`
-  mutation updateUser($email: String, $password: String) {
-    updateUser(
-      input: {
-        email: $email
-        password: $password
-      }
-    ) {
-      id
-      email
-    } 
-    
-  }
-`
 
-const login = gql`
-  mutation login(
-    $email: String!, 
-    $password: String!) {
-      login(
-        input: {
-          email: $email,
-          password: $password
-        }
-    ) {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-`
-
-
-const deleteUser = gql`
-    mutation {
-      deleteUser {
-        id
-      }
-    }
-  `
 
 beforeAll(async () => {
   await prisma.deleteManyUsers()
@@ -127,6 +71,8 @@ describe('User registration tests', () => {
 
 
 describe('User authorization tests', () => {
+
+  // TODO add test to expect errors when not auth'd
 
   const input = {
     email: 'test_user2@mail.com',
