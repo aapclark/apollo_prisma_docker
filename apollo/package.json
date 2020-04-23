@@ -4,10 +4,10 @@
   "description": "Apollo Server for apollo-prisma-docker.",
   "main": "index.js",
   "scripts": {
-    "test": "env-cmd -f ../configuration/test.env jest --runInBand --watchAll",
+    "test": "env-cmd -f ../.env jest --runInBand --watchAll",
     "server": "nodemon src/index.js",
     "start": "node src/index.js",
-    "development": "nodemon --exec babel-node src/index.js"
+    "development": "env-cmd -f ../.env nodemon --exec babel-node src/index.js"
   },
   "jest": {
     "globalSetup": "./src/__tests__/config/globalSetup.js",
@@ -45,6 +45,7 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "apollo-boost": "^0.4.7",
     "apollo-server": "^2.11.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
