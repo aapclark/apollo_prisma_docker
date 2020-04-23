@@ -25,8 +25,6 @@ To run the containerized services, complete the following steps:
   * `PRISMA_STAGE`
   * `PRISMA_SECRET` | Used to authenticate requests to Prisma Client
   * `PRISMA_MANAGEMENT_API_SECRET` | Optional, but should also be excluded from Docker and Prisma configurations. This ENV provides a secret for Prisma's Management API.
-  
-
 </details>
 
 <details> 
@@ -40,6 +38,7 @@ To run the containerized services, complete the following steps:
 
   * `JWT_SECRET` | Secret used for generating and evaluating Authorization tokens.
   * `APOLLO_PORT` | Specifies the port at which the Apollo Server listens.
+  * `APOLLO_TEST_PORT` | Specifies the port at which the Apollo Server listens during testing scripts.
 </details>
 
 

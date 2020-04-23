@@ -1,40 +1,9 @@
-import { gql } from 'apollo-boost'
 import { prisma } from '../../generated/prisma-client'
 import { getClient, getAuthenticatedClient } from '../utils/getClient'
+import { registerUser, updateUser, login, deleteUser } from '../queries'
 
 const client = getClient()
-let authenticatedClient
 
-
-const registerUser = gql`
-  mutation register($email: String!, $password: String!) { 
-    register (
-      input: {
-        email: $email
-        password: $password
-      }
-    ) {
-      token
-      user {
-        id
-      }
-    }
-  }
-  `
-const updateUser = gql`
-  mutation updateUser($email: String, $password: String) {
-    updateUser(
-      input: {
-        email: $email
-        password: $password
-      }
-    ) {
-      id
-      email
-    } 
-    
-  }
-`
 
 beforeAll(async () => {
   await prisma.deleteManyUsers()
@@ -48,9 +17,8 @@ describe('User registration tests', () => {
     password: 'much_security'
   }
   it('Should throw error for insufficient password.', async () => {
-    // const user = prisma.$exists(newUser.data.register.id)
 
-    await expect(client.mutate({
+    expect(await client.mutate({
       mutation: registerUser,
       variables: {
         email: 'test_user@mail.com',
@@ -78,20 +46,84 @@ describe('User registration tests', () => {
   })
 })
 
-describe('User update tests', () => {
+// TODO -- update needs auth'd client
+// describe('User update tests', () => {
+//   const input = {
+//     email: 'new_email@test.co',
+//     password: 'more_secure_password'
+//   }
+
+
+//   it('Should reflect changes to user data in db', async () => {
+//     await client.mutate({
+//       mutation: updateUser,
+//       variables: { ...input }
+//     })
+
+//     expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+//   })
+
+// })
+
+
+describe('User authorization tests', () => {
+
+  // TODO add test to expect errors when not auth'd
+
   const input = {
-    email: 'new_email@test.co',
-    password: 'more_secure_password'
+    email: 'test_user2@mail.com',
+    password: 'much_security'
   }
 
 
-  it('Should reflect changes to user data in db', async () => {
-    await client.mutate({
+  it('Should reject a request that does not provide proper authentication.', async () => {
+    const res = await client.mutate({
       mutation: updateUser,
+      variables: {
+        email: 'rejected_email@mail.com',
+        password: 'rejected_password'
+      }
+    })
+
+    console.log(`unauth'd res`, res)
+    expect(res).toThrowError('User not authenticated.')
+  })
+
+  it('Should return a token when user logs in', async () => {
+    const { data } = await client.mutate({
+      mutation: login,
       variables: { ...input }
     })
 
-    expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+    expect(data.login).toHaveProperty('token')
+  })
+
+  it('Should remove user from db', async () => {
+    const { data } = await client.mutate({
+      mutation: login,
+      variables: { ...input }
+    })
+
+    const { login: { token } } = data
+
+
+    const authenticatedClient = await getAuthenticatedClient(token)
+
+
+    const deletedUser = await authenticatedClient.mutate({
+      mutation: deleteUser
+    })
+
+    const { data: { deleteUser: { id } } } = deletedUser
+
+
+
+    const userExists = await prisma.$exists.user({ id })
+
+    console.log('userExists', userExists)
+
+    expect(userExists).toBe(false)
+
   })
 
 })
