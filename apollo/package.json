@@ -11,7 +11,11 @@
   },
   "jest": {
     "globalSetup": "./src/__tests__/config/globalSetup.js",
-    "globalTeardown": "./src/__tests__/config/globalTeardown.js"
+    "globalTeardown": "./src/__tests__/config/globalTeardown.js",
+    "testPathIgnorePatterns": [
+      "./__tests__/config/",
+      "./__tests__/utils/"
+    ]
   },
   "repository": {
     "type": "git",
