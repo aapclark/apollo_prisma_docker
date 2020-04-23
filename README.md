@@ -40,6 +40,7 @@ To run the containerized services, complete the following steps:
 
   * `JWT_SECRET` | Secret used for generating and evaluating Authorization tokens.
   * `APOLLO_PORT` | Specifies the port at which the Apollo Server listens.
+  * `APOLLO_TEST_PORT` | Specifies the port at which the Apollo Server listens during testing scripts.
 </details>
 
 
