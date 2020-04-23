@@ -1,6 +1,8 @@
 //  Mutations for User management
 import bcrypt from 'bcryptjs'
-import { generateToken, getUserId } from '../../auth'
+import { generateToken, getUserId, hashPassword } from '../../auth'
+import { AuthenticationError } from 'apollo-server'
+
 
 async function register(_, { input }, { prisma }) {
   // Checks if email is taken before proceeding
@@ -9,8 +11,12 @@ async function register(_, { input }, { prisma }) {
     email
   })
 
-  if (!emailTaken) {
-    const hash = bcrypt.hashSync(password, 10);
+  if (emailTaken) {
+    throw new AuthenticationError('Email already in use.')
+  }
+
+  else {
+    const hash = hashPassword(password)
     const user = await prisma.createUser({
       email,
       password: hash
@@ -21,9 +27,7 @@ async function register(_, { input }, { prisma }) {
       user,
     }
   }
-  else {
-    throw new Error('Email address is already in use.')
-  }
+
 }
 
 async function login(_, { input }, { prisma }) {
@@ -31,7 +35,7 @@ async function login(_, { input }, { prisma }) {
   const user = await prisma.user({ email });
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!user || !passwordMatch) {
-    throw new Error('Invalid Login.');
+    throw new AuthenticationError('Invalid Login.');
   }
   else {
     const token = generateToken(user);
@@ -42,8 +46,9 @@ async function login(_, { input }, { prisma }) {
   }
 }
 
-async function updateUser(_, args, { prisma }) {
-  const id = getUserId(context);
+async function updateUser(_, args, { req, prisma }) {
+  // console.log('update = = = = = req = = = = = ', req)
+  const id = getUserId(req);
   res = await prisma.updateUser({
     data: { ...args },
     where: {
@@ -54,10 +59,14 @@ async function updateUser(_, args, { prisma }) {
   return res
 }
 
-async function deleteUser(_, __, { request, prisma }) {
-  const id = getUserId(request);
+async function deleteUser(_, __, { req, prisma }) {
+  // console.log('delete = = = = = req = = = = = ', req)
+
+  const id = getUserId(req);
   return await prisma.deleteUser({ id });
 }
+
+
 
 export default {
   register,
