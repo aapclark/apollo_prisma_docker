@@ -15,7 +15,7 @@
     "testPathIgnorePatterns": [
       "src/__tests__/config/",
       "src/__tests__/utils/",
-      "src/__tests__/queries"
+      "src/__tests__/queries/"
     ]
   },
   "repository": {

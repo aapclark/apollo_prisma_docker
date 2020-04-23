@@ -3,9 +3,6 @@ import { getClient, getAuthenticatedClient } from '../utils/getClient'
 import { registerUser, updateUser, login, deleteUser } from '../queries'
 
 const client = getClient()
-let authenticatedClient
-
-
 
 
 beforeAll(async () => {
@@ -20,9 +17,8 @@ describe('User registration tests', () => {
     password: 'much_security'
   }
   it('Should throw error for insufficient password.', async () => {
-    // const user = prisma.$exists(newUser.data.register.id)
 
-    await expect(client.mutate({
+    expect(await client.mutate({
       mutation: registerUser,
       variables: {
         email: 'test_user@mail.com',
@@ -90,6 +86,7 @@ describe('User authorization tests', () => {
     })
 
     console.log(`unauth'd res`, res)
+    expect(res).toThrowError('User not authenticated.')
   })
 
   it('Should return a token when user logs in', async () => {
