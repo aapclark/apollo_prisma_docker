@@ -36,6 +36,34 @@ const updateUser = gql`
   }
 `
 
+const login = gql`
+  mutation login(
+    $email: String!, 
+    $password: String!) {
+      login(
+        input: {
+          email: $email,
+          password: $password
+        }
+    ) {
+      token
+      user {
+        id
+        email
+      }
+    }
+  }
+`
+
+
+const deleteUser = gql`
+    mutation {
+      deleteUser {
+        id
+      }
+    }
+  `
+
 beforeAll(async () => {
   await prisma.deleteManyUsers()
 
@@ -78,20 +106,68 @@ describe('User registration tests', () => {
   })
 })
 
-describe('User update tests', () => {
+// TODO -- update needs auth'd client
+// describe('User update tests', () => {
+//   const input = {
+//     email: 'new_email@test.co',
+//     password: 'more_secure_password'
+//   }
+
+
+//   it('Should reflect changes to user data in db', async () => {
+//     await client.mutate({
+//       mutation: updateUser,
+//       variables: { ...input }
+//     })
+
+//     expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+//   })
+
+// })
+
+
+describe('User authorization tests', () => {
+
   const input = {
-    email: 'new_email@test.co',
-    password: 'more_secure_password'
+    email: 'test_user2@mail.com',
+    password: 'much_security'
   }
 
-
-  it('Should reflect changes to user data in db', async () => {
-    await client.mutate({
-      mutation: updateUser,
+  it('Should return a token when user logs in', async () => {
+    const { data } = await client.mutate({
+      mutation: login,
       variables: { ...input }
     })
 
-    expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+    expect(data.login).toHaveProperty('token')
+  })
+
+  it('Should remove user from db', async () => {
+    const { data } = await client.mutate({
+      mutation: login,
+      variables: { ...input }
+    })
+
+    const { login: { token } } = data
+
+
+    const authenticatedClient = await getAuthenticatedClient(token)
+
+
+    const deletedUser = await authenticatedClient.mutate({
+      mutation: deleteUser
+    })
+
+    const { data: { deleteUser: { id } } } = deletedUser
+
+
+
+    const userExists = await prisma.$exists.user({ id })
+
+    console.log('userExists', userExists)
+
+    expect(userExists).toBe(false)
+
   })
 
 })
