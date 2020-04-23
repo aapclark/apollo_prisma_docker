@@ -4,12 +4,8 @@ import typeDef from './type'
 
 
 
-const auth = [inputDef,
-  mutationDef,
-  typeDef
-]
-
 export default [inputDef,
   mutationDef,
-  typeDef
+  typeDef,
+
 ]
