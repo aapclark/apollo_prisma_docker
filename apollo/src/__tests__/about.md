@@ -15,7 +15,7 @@ The folder and file structure of testing will follow the structure of typeDefs i
 <details>
   <summary>Template</summary>
 
-  - [ ] test 1 intent
+  - [ ] test1 intent
   - [ ] test2 intent
   - [ ] test3 intent
 
