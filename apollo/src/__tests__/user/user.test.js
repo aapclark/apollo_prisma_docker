@@ -41,7 +41,7 @@ describe('User registration tests', () => {
     expect(await client.mutate({
       mutation: registerUser,
       variables: { ...input }
-    })).toThrowError('Email address is already in use.')
+    })).toThrowError('Email already in use.')
 
   })
 })
@@ -84,9 +84,8 @@ describe('User authorization tests', () => {
         password: 'rejected_password'
       }
     })
+    expect(res).toThrowError('Not Authenticated.')
 
-
-    expect(res).toThrowError('User not authenticated.')
   })
 
   it('Should return a token when user logs in', async () => {
@@ -105,22 +104,12 @@ describe('User authorization tests', () => {
     })
 
     const { login: { token } } = data
-
-
     const authenticatedClient = await getAuthenticatedClient(token)
-
-
     const deletedUser = await authenticatedClient.mutate({
       mutation: deleteUser
     })
-
     const { data: { deleteUser: { id } } } = deletedUser
-
-
-
     const userExists = await prisma.$exists.user({ id })
-
-
 
     expect(userExists).toBe(false)
 
