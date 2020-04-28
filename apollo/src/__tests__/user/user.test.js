@@ -85,6 +85,7 @@ describe('User authorization tests', () => {
       }
     })
     expect(res).toThrowError('Not Authenticated.')
+
   })
 
   it('Should return a token when user logs in', async () => {
@@ -109,6 +110,7 @@ describe('User authorization tests', () => {
     })
     const { data: { deleteUser: { id } } } = deletedUser
     const userExists = await prisma.$exists.user({ id })
+
     expect(userExists).toBe(false)
 
   })
