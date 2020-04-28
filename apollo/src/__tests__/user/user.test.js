@@ -85,7 +85,7 @@ describe('User authorization tests', () => {
       }
     })
 
-    console.log(`unauth'd res`, res)
+
     expect(res).toThrowError('User not authenticated.')
   })
 
@@ -120,7 +120,7 @@ describe('User authorization tests', () => {
 
     const userExists = await prisma.$exists.user({ id })
 
-    console.log('userExists', userExists)
+
 
     expect(userExists).toBe(false)
 
