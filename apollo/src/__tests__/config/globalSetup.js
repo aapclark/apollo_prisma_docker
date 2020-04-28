@@ -5,7 +5,6 @@ const options = {
 }
 
 
-
 const globalSetup = async () => {
   console.log(`Starting test server on port ${options.port}`)
   global.httpServer = server
