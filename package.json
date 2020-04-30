@@ -5,7 +5,7 @@
   "scripts": {
     "dev:docker:build": "python3 utils/env_script.py ./configuration/development.env && docker-compose up --build",
     "dev:docker": "python3 utils/env_script.py ./configuration/development.env && docker-compose up",
-    "dev:local": "docker-compose prisma postgres",
+    "dev:local": "docker-compose up -d prisma postgres &&  cd apollo npm run development:local",
     "dev:docker:build:test": "python3 utils/env_script.py ./configuration/test.env && docker-compose up --build",
     "dev:docker:test": "python3 utils/env_script.py ./configuration/test.env && docker-compose up",
     "dev:local:test:": "python3 utils/env_script.py ./configuration/test.env && docker-compose up postgres prisma"
