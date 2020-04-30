@@ -2,6 +2,14 @@
   "name": "apollo_prisma_docker",
   "version": "0.0.1",
   "description": "Boilerplate and scaffolding repository for Apollo, Prisma, Docker stack.",
+  "scripts": {
+    "dev:docker:build": "python3 utils/env_script.py ./configuration/development.env && docker-compose up --build",
+    "dev:docker": "python3 utils/env_script.py ./configuration/development.env && docker-compose up",
+    "dev:local": "docker-compose prisma postgres",
+    "dev:docker:build:test": "python3 utils/env_script.py ./configuration/test.env && docker-compose up --build",
+    "dev:docker:test": "python3 utils/env_script.py ./configuration/test.env && docker-compose up",
+    "dev:local:test:": "python3 utils/env_script.py ./configuration/test.env && docker-compose up postgres prisma"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aapclark/apollo_prisma_docker.git"
@@ -16,5 +24,6 @@
   "bugs": {
     "url": "https://github.com/aapclark/apollo_prisma_docker/issues"
   },
-  "homepage": "https://github.com/aapclark/apollo_prisma_docker#readme"
+  "homepage": "https://github.com/aapclark/apollo_prisma_docker#readme",
+  "dependencies": {}
 }
