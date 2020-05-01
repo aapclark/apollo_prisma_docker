@@ -14,6 +14,12 @@ This is a work in progress and certain features have yet to be completed.
 - From `prisma` directory, run `prisma deploy -e _desired-env_` where `desired_env_ is the location of the ENV file.
 - User can now interact with mutations and queries for User type.
 
+## Additional Scripts
+
+This package attempts to be flexible in the ways the Apollo service can be run. For testing, running the test scripts outside of Docker might be desirable. Additionally, if quick changes are made to Apollo's `package.json` file, the _entire_ Docker Apollo service will must be rebuilt to reflect those changes. Following are descriptions of what each script in `/package.json` accomplishes.
+- `env:dev` and `env:test` utilize the python script in `/utils` to load a primary .env file in the root project directory to inform Prisma and Docker. This script is is called by other npm scripts and won't need to be directly called by the user.
+- `{stage}:docker:build` where `{stage}` is `test` or `dev` will execute the env-loading script followed by `docker-compose up --build`.
+- `{stage}:{container}` where `{stage}` is `test` or `dev` will load respective ENV and, where `{container}` is `docker` will launch _every_ service (Apollo, Prisma, Postgres) inside of the Docker container. Where `{container}` is `local`, _only_ Prisma and Postgres will run in the container -- the Apollo service will run in a NodeJS instance in the terminal. Currently this is most useful for testing, as Docker's terminal formats the Jest test feedback in ways less readable than the standard terminal presentation.
 
 ## Environment Variables
 
@@ -44,12 +50,7 @@ This is a work in progress and certain features have yet to be completed.
   * `APOLLO_TEST_PORT` | Specifies the port at which the Apollo Server listens during testing scripts.
 </details>
 
-## Additional Scripts
 
-This package attempts to be flexible in the ways the Apollo service can be run. For testing, running the test scripts outside of Docker might be desirable. Additionally, if quick changes are made to Apollo's `package.json` file, the _entire_ Docker Apollo service will must be rebuilt to reflect those changes. Following are descriptions of what each script in `/package.json` accomplishes.
-- `env:dev` and `env:test` utilize the python script in `/utils` to load a primary .env file in the root project directory to inform Prisma and Docker. This script is is called by other npm scripts and won't need to be directly called by the user.
-- `{stage}:docker:build` where `{stage}` is `test` or `dev` will execute the env-loading script followed by `docker-compose up --build`.
-- `{stage}:{container}` where `{stage}` is `test` or `dev` will load respective ENV and, where `{container}` is `docker` will launch _every_ service (Apollo, Prisma, Postgres) inside of the Docker container. Where `{container}` is `local`, _only_ Prisma and Postgres will run in the container -- the Apollo service will run in a NodeJS instance in the terminal. Currently this is most useful for testing, as Docker's terminal formats the Jest test feedback in ways less readable than the standard terminal presentation.
 
 ### Docker, Prisma, and Apollo Server
 
