@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Boilerplate and scaffolding repository for Apollo, Prisma, Docker stack.",
   "scripts": {
-    "env:dev": "python3 utils/env_script.py ./configuration/development.env ",
+    "env:dev": "cd utils && python3 env_script.py ../configuration/development.env",
     "env:test": "cd utils && python3 env_script.py ../configuration/test.env && cd ..",
     "dev:docker:build": "npm run env:dev && docker-compose up --build",
     "dev:docker": "npm run env:dev && docker-compose up",
