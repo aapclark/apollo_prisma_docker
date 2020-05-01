@@ -11,7 +11,7 @@ This is a work in progress and certain features have yet to be completed.
 - Supply specified ENVs inside of `/configuration/` named either `development.env` or `test.env` depending on service and stage.
 - `package.json` in the root project directory contains various scripts (described in detail below), to build a new Docker container and launch the service within the new container, run `npm run dev:docker:build`.
 - Apollo Service is now accessible at `localhost:5502/`
-- From `prisma` directory, run `prisma deploy -e _desired-env_` where `desired_env_ is the location of the ENV file.
+- From `prisma` directory, run `prisma deploy -e {target_env}` where `{target_env}` is the location of the ENV file.
 - User can now interact with mutations and queries for User type.
 
 
