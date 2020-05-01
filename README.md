@@ -7,12 +7,12 @@ This is a work in progress and certain features have yet to be completed.
 
 # Getting Started
 
-To run the containerized services, complete the following steps:
-- Clone this repo
-- Load listed Environment Variables using script described below.
-- Run `docker-compose up --build`
-- From `/prisma` directory, run `prisma deploy`
-- Apollo Server can be accessed at `localhost:5502`. See below for available operations against the server.
+- Clone this repository.
+- Supply specified ENVs inside of `/configuration/` named either `development.env` or `test.env` depending on service and stage.
+- `package.json` in the root project directory contains various scripts (described in detail below), to build a new Docker container and launch the service within the new container, run `npm run dev:docker:build`.
+- Apollo Service is now accessible at `localhost:5502/`
+- From `prisma` directory, run `prisma deploy -e _desired-env_` where `desired_env_ is the location of the ENV file.
+- User can now interact with mutations and queries for User type.
 
 
 ## Environment Variables
