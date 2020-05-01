@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand --watchAll",
-    "temp": "env-cmd -f ../.env nodemon src/index.js",
+    "test:local": "env-cmd -f ../configuration/test.env jest --runInBand --watchAll",
     "server": "nodemon src/index.js",
     "start": "node src/index.js",
     "development": "nodemon --exec babel-node src/index.js",
