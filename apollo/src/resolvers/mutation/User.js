@@ -46,16 +46,18 @@ async function login(_, { input }, { prisma }) {
   }
 }
 
-async function updateUser(_, args, { req, prisma }) {
+async function updateUser(_, { input }, { req, prisma }) {
   // console.log('update = = = = = req = = = = = ', req)
+  // console.log('update = = = = = args = = = = = ', args)
+
   const id = getUserId(req);
-  res = await prisma.updateUser({
-    data: { ...args },
+  const res = await prisma.updateUser({
+    data: { ...input },
     where: {
       id,
     },
   })
-
+  // console.log('res', res)
   return res
 }
 

@@ -50,34 +50,49 @@ describe('User registration tests', () => {
 })
 
 // TODO -- update needs auth'd client
-// describe('User update tests', () => {
-//   const input = {
-//     email: 'new_email@test.co',
-//     password: 'more_secure_password'
-//   }
+describe('User update tests', () => {
+  const input = {
+    email: 'test_user3@mail.com',
+    password: 'much_security_3'
+  }
+
+  it('Should reflect changes to user data in db', async () => {
+
+    const { data } = await client.mutate({
+      mutation: registerUser,
+      variables: { ...input }
+    })
+
+    const { register: { token } } = data
+    const authenticatedClient = await getAuthenticatedClient(token)
+    const newUserInfo = {
+      email: 'updated_password3@mail.com'
+    }
+
+    const updatedUser = await authenticatedClient.mutate({
+      mutation: updateUser,
+      variables: { ...newUserInfo }
+    })
 
 
-//   it('Should reflect changes to user data in db', async () => {
-//     await client.mutate({
-//       mutation: updateUser,
-//       variables: { ...input }
-//     })
 
-//     expect(await prisma.$exists.user({ email: input.email })).toBe(true)
-//   })
+    // await client.mutate({  
+    //   mutation: updateUser,
+    //   variables: { ...input }
+    // })
 
-// })
+    // expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+  })
+
+})
 
 
 describe('User authorization tests', () => {
-
-  // TODO add test to expect errors when not auth'd
 
   const input = {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
-
 
   it('Should reject a request that does not provide proper authentication.', async () => {
 
