@@ -7,7 +7,7 @@
     "env:test": "cd utils && python3 env_script.py ../configuration/test.env && cd ..",
     "dev:docker:build": "npm run env:dev && docker-compose up --build",
     "dev:docker": "npm run env:dev && docker-compose up",
-    "dev:local": "docker-compose up -d prisma postgres &&  npm run apollo:dev",
+    "dev:local": "npm run env:dev && docker-compose up -d prisma postgres &&  npm run apollo:dev",
     "apollo:dev": "cd apollo && npm run development:local",
     "apollo:test": "cd apollo && npm run test:local",
     "test:docker:build": "npm run env:test && docker-compose up --build",
