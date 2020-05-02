@@ -16,17 +16,18 @@ describe('User registration tests', () => {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
+  // * Password-length test
   it('Should throw error for insufficient password.', async () => {
 
-    expect(await client.mutate({
+    await expect(client.mutate({
       mutation: registerUser,
       variables: {
         email: 'test_user@mail.com',
         password: 'no'
       }
-    })).rejects.toThrowError('Password must be at least 8 characters.')
+    })).rejects.toThrow(`GraphQL error: Password must be at least 8 characters.`)
   })
-
+  // * Successful registration test
   it('Should successfully create a new user from registerUser mutation', async () => {
 
     await client.mutate({
@@ -37,54 +38,71 @@ describe('User registration tests', () => {
     expect(await prisma.$exists.user({ email: input.email })).toBe(true)
   })
 
+  // * Already-used email test
   it('Should throw error when email is taken.', async () => {
-    expect(await client.mutate({
+
+    await expect(client.mutate({
       mutation: registerUser,
       variables: { ...input }
-    })).toThrowError('Email already in use.')
+    })).rejects.toThrow('GraphQL error: Email already in use.')
 
   })
 })
 
 // TODO -- update needs auth'd client
-// describe('User update tests', () => {
-//   const input = {
-//     email: 'new_email@test.co',
-//     password: 'more_secure_password'
-//   }
+describe('User update tests', () => {
+  const input = {
+    email: 'test_user3@mail.com',
+    password: 'much_security_3'
+  }
+
+  it('Should reflect changes to user data in db', async () => {
+
+    const { data } = await client.mutate({
+      mutation: registerUser,
+      variables: { ...input }
+    })
+
+    const { register: { token } } = data
+    const authenticatedClient = await getAuthenticatedClient(token)
+    const newUserInfo = {
+      email: 'updated_password3@mail.com'
+    }
+
+    const updatedUser = await authenticatedClient.mutate({
+      mutation: updateUser,
+      variables: { ...newUserInfo }
+    })
 
 
-//   it('Should reflect changes to user data in db', async () => {
-//     await client.mutate({
-//       mutation: updateUser,
-//       variables: { ...input }
-//     })
 
-//     expect(await prisma.$exists.user({ email: input.email })).toBe(true)
-//   })
+    // await client.mutate({  
+    //   mutation: updateUser,
+    //   variables: { ...input }
+    // })
 
-// })
+    // expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+  })
+
+})
 
 
 describe('User authorization tests', () => {
-
-  // TODO add test to expect errors when not auth'd
 
   const input = {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
 
-
   it('Should reject a request that does not provide proper authentication.', async () => {
-    const res = await client.mutate({
+
+    await expect(client.mutate({
       mutation: updateUser,
       variables: {
         email: 'rejected_email@mail.com',
         password: 'rejected_password'
       }
-    })
-    expect(res).toThrowError('Not Authenticated.')
+    })).rejects.toThrow('GraphQL error: Not Authenticated.')
 
   })
 
