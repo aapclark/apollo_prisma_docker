@@ -62,28 +62,23 @@ describe('User update tests', () => {
       mutation: registerUser,
       variables: { ...input }
     })
-
-    const { register: { token } } = data
+    const { register: { token, user: { id } } } = data
     const authenticatedClient = await getAuthenticatedClient(token)
+
     const newUserInfo = {
       email: 'updated_password3@mail.com'
     }
 
-    const updatedUser = await authenticatedClient.mutate({
+
+    await authenticatedClient.mutate({
       mutation: updateUser,
       variables: { ...newUserInfo }
     })
 
+    const user = await prisma.user({ id })
 
-
-    // await client.mutate({  
-    //   mutation: updateUser,
-    //   variables: { ...input }
-    // })
-
-    // expect(await prisma.$exists.user({ email: input.email })).toBe(true)
+    expect(user.email).toBe(newUserInfo.email)
   })
-
 })
 
 
