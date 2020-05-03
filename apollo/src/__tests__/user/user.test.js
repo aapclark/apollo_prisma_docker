@@ -7,9 +7,7 @@ const client = getClient()
 
 beforeAll(async () => {
   await prisma.deleteManyUsers()
-
 })
-
 
 describe('User registration tests', () => {
   const input = {
@@ -49,7 +47,7 @@ describe('User registration tests', () => {
   })
 })
 
-// TODO -- update needs auth'd client
+
 describe('User update tests', () => {
   const input = {
     email: 'test_user3@mail.com',
@@ -125,7 +123,6 @@ describe('User authorization tests', () => {
     const userExists = await prisma.$exists.user({ id })
 
     expect(userExists).toBe(false)
-
   })
 
 })
