@@ -48,9 +48,6 @@ async function login(_, { input }, { prisma }) {
 }
 
 async function updateUser(_, { input }, { req, prisma }) {
-  // console.log('update = = = = = req = = = = = ', req)
-  // console.log('update = = = = = args = = = = = ', args)
-
   const id = getUserId(req);
   const res = await prisma.updateUser({
     data: { ...input },
@@ -58,13 +55,11 @@ async function updateUser(_, { input }, { req, prisma }) {
       id,
     },
   })
-  // console.log('res', res)
+
   return res
 }
 
 async function deleteUser(_, __, { req, prisma }) {
-  // console.log('delete = = = = = req = = = = = ', req)
-
   const id = getUserId(req);
   return await prisma.deleteUser({ id });
 }
