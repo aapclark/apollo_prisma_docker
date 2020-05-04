@@ -49,8 +49,27 @@ async function login(_, { input }, { prisma }) {
 
 async function updateUser(_, { input }, { req, prisma }) {
   const id = getUserId(req);
+  const { email, password } = input
+  const updates = {}
+  if (email) {
+    const emailTaken = await prisma.$exists.user({
+      email
+    })
+    if (emailTaken) {
+      throw new UserInputError('Email already in use.')
+    }
+    else {
+      updates["email"] = email
+    }
+  }
+
+  if (password) {
+    const hash = hashPassword(password)
+    updates["password"] = hash
+  }
+
   const res = await prisma.updateUser({
-    data: { ...input },
+    data: { ...updates },
     where: {
       id,
     },
