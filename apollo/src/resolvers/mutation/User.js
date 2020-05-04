@@ -1,7 +1,7 @@
 //  Mutations for User management
 import bcrypt from 'bcryptjs'
 import { generateToken, getUserId, hashPassword } from '../../auth'
-import { AuthenticationError } from 'apollo-server'
+import { AuthenticationError, UserInputError } from 'apollo-server'
 
 
 async function register(_, { input }, { prisma }) {
@@ -12,7 +12,7 @@ async function register(_, { input }, { prisma }) {
   })
 
   if (emailTaken) {
-    throw new AuthenticationError('Email already in use.')
+    throw new UserInputError('Email already in use.')
   }
 
   else {
