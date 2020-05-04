@@ -84,7 +84,16 @@ Prisma's datamodel specifies a User table in the database. This is structured so
 
 
 ## Operations
+GraphQL operations can be made at endpoint `localhost:5502` using a GraphQL Client or GraphQL Playground. There are a number of supported operations.
 
+#### Queries
+* `info` and `test` return strings and are useful to test a connection to the server.
+
+#### Mutations
+* `register` anticipates an object, `input`, with *required* fields `email` and `password`. Where successful, information for that newly user created and Authentication `token` can be returned. Where unsuccessful, an error is passed to the client.
+* `login` anticipates an object, `input`, with *required* fields `email` and `password`. Where successful, information for that user and a new `token` can be returned.
+* `updateUser` requires a valid token in the request HTTP header and throws an authentication error otherwise. An object, `input`, with fields `email` _and/or_ `password` which contain a new email or password. Where successful, the _new_ information for that user is returned by the server. UserInputErrors are returned to the client in the case where an email is already in use.
+* `deleteUser` requires a valid token in the request  HTTP header and throws an authentication error otherwise. Where successful, the server removes that user and returns the user information back to the client.
 
 ## Structure
 
