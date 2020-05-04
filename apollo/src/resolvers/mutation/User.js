@@ -33,7 +33,8 @@ async function register(_, { input }, { prisma }) {
 async function login(_, { input }, { prisma }) {
   const { email, password } = input
   const user = await prisma.user({ email });
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  let passwordMatch
+  user && (passwordMatch = await bcrypt.compare(password, user.password))
   if (!user || !passwordMatch) {
     throw new AuthenticationError('Invalid Login.');
   }

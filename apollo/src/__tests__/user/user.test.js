@@ -47,7 +47,6 @@ describe('User registration tests', () => {
   })
 })
 
-
 describe('User update tests', () => {
   const input = {
     email: 'test_user3@mail.com',
@@ -55,7 +54,6 @@ describe('User update tests', () => {
   }
 
   it('Should reflect changes to user data in db', async () => {
-
     const { data } = await client.mutate({
       mutation: registerUser,
       variables: { ...input }
@@ -81,14 +79,12 @@ describe('User update tests', () => {
 
 
 describe('User authorization tests', () => {
-
   const input = {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
 
   it('Should reject a request that does not provide proper authentication.', async () => {
-
     await expect(client.mutate({
       mutation: updateUser,
       variables: {
