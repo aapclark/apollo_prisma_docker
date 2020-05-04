@@ -4,10 +4,12 @@
   "description": "Apollo Server for apollo-prisma-docker.",
   "main": "index.js",
   "scripts": {
-    "test": "env-cmd -f ../.env jest --runInBand --watchAll",
+    "test": "jest --runInBand --watchAll",
+    "test:local": "env-cmd -f ../configuration/test.env jest --runInBand --watchAll",
     "server": "nodemon src/index.js",
     "start": "node src/index.js",
-    "development": "env-cmd -f ../.env nodemon --exec babel-node src/index.js"
+    "development": "nodemon --exec babel-node src/index.js",
+    "development:local": "env-cmd -f ../configuration/development.env nodemon --exec babel-node src/index.js"
   },
   "jest": {
     "globalSetup": "./src/__tests__/config/globalSetup.js",

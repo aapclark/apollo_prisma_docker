@@ -1,6 +1,5 @@
 import server from './server'
 
-
 const options = { port: (process.env.APOLLO_PORT || process.env.PORT) || 4444 };
 
 

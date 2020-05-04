@@ -7,13 +7,20 @@ This is a work in progress and certain features have yet to be completed.
 
 # Getting Started
 
-To run the containerized services, complete the following steps:
-- Clone this repo
-- Load listed Environment Variables using script described below.
-- Run `docker-compose up --build`
-- From `/prisma` directory, run `prisma deploy`
-- Apollo Server can be accessed at `localhost:5502`. See below for available operations against the server.
+- Clone this repository.
+- Supply specified ENVs inside of `/configuration/` named either `development.env` or `test.env` depending on service and stage.
+- `package.json` in the root project directory contains various scripts (described in detail below), to build a new Docker container and launch the service within the new container, run `npm run dev:docker:build`.
+- Apollo Service is now accessible at `localhost:5502/`
+- From `prisma` directory, run `prisma deploy -e {target_env}` where `{target_env}` is the location of the ENV file.
+- User can now interact with mutations and queries for User type.
 
+## Additional Scripts
+
+This package attempts to be flexible in the ways the Apollo service can be run. For testing, running the test scripts outside of Docker might be desirable. Additionally, if quick changes are made to Apollo's `package.json` file, the _entire_ Docker Apollo service will must be rebuilt to reflect those changes. Following are descriptions of what each script in `/package.json` accomplishes.
+- `beforeAll` will stop all currently-running Docker services associated with the project. This script is utilized by other scripts to ensure Docker containers are running with the correct environment.
+- `env:dev` and `env:test` utilize the python script in `/utils` to load a primary .env file in the root project directory to inform Prisma and Docker. This script is is called by other npm scripts and won't need to be directly called by the user.
+- `{stage}:docker:build` where `{stage}` is `test` or `dev` will execute the env-loading script followed by `docker-compose up --build`.
+- `{stage}:{container}` where `{stage}` is `test` or `dev` will load respective ENV and, where `{container}` is `docker` will launch _every_ service (Apollo, Prisma, Postgres) inside of the Docker container. Where `{container}` is `local`, _only_ Prisma and Postgres will run in the container -- the Apollo service will run in a NodeJS instance in the terminal. Currently this is most useful for testing, as Docker's terminal formats the Jest test feedback in ways less readable than the standard terminal presentation.
 
 ## Environment Variables
 
@@ -38,10 +45,12 @@ To run the containerized services, complete the following steps:
 <details> 
   <summary>Apollo Server</summary>
 
+  * `NPM_COMMAND` | Provides the command that Docker runs on Apollo service in `docker-compose`.
   * `JWT_SECRET` | Secret used for generating and evaluating Authorization tokens.
   * `APOLLO_PORT` | Specifies the port at which the Apollo Server listens.
   * `APOLLO_TEST_PORT` | Specifies the port at which the Apollo Server listens during testing scripts.
 </details>
+
 
 
 ### Docker, Prisma, and Apollo Server
@@ -53,7 +62,7 @@ The separation of ENVs is to allow the execution of `prisma deploy` without havi
 
 ## Loading ENV Files
 
-docker-compose assumes the existence of a `.env` file at the root project directory. Testing and development scenarios use different envinronment variables. For example, testing and development will each have their own stage on the Prisma service. Separate ENV files can be stored in the `/configuration` directory. Inside `/utils` is a Python script which will take a specified ENV file and create a new `.env` file in the root directory. To use this script, take the following steps:
+docker-compose assumes the existence of a `.env` file at the root project directory. Testing and development scenarios use different envinronment variables. For example, testing and development will each have their own stage on the Prisma service. Separate ENV files can be stored in the `/configuration` directory. Inside `/utils` is a Python script which will take a specified ENV file and create a new `.env` file in the root directory. The NPM scripts described above incorporate the ENV loading script thus running this script directly is generally unneccesary. To use this script, take the following steps:
   1. Open a Terminal window and cd to `/utils`
   2. Execute Python script using `python3 env_script.py [source_env_file]`
      1. The file directory is relative to the script, so the command to write development env files to the root directory would be `python3 env_script.py ../configuration/development.env`
@@ -75,7 +84,16 @@ Prisma's datamodel specifies a User table in the database. This is structured so
 
 
 ## Operations
+GraphQL operations can be made at endpoint `localhost:5502` using a GraphQL Client or GraphQL Playground. There are a number of supported operations.
 
+#### Queries
+* `info` and `test` return strings and are useful to test a connection to the server.
+
+#### Mutations
+* `register` anticipates an object, `input`, with *required* fields `email` and `password`. Where successful, information for that newly user created and Authentication `token` can be returned. Where unsuccessful, an error is passed to the client.
+* `login` anticipates an object, `input`, with *required* fields `email` and `password`. Where successful, information for that user and a new `token` can be returned.
+* `updateUser` requires a valid token in the request HTTP header and throws an authentication error otherwise. An object, `input`, with fields `email` _and/or_ `password` which contain a new email or password. Where successful, the _new_ information for that user is returned by the server. UserInputErrors are returned to the client in the case where an email is already in use.
+* `deleteUser` requires a valid token in the request  HTTP header and throws an authentication error otherwise. Where successful, the server removes that user and returns the user information back to the client.
 
 ## Structure
 
