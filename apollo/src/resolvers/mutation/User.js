@@ -33,7 +33,8 @@ async function register(_, { input }, { prisma }) {
 async function login(_, { input }, { prisma }) {
   const { email, password } = input
   const user = await prisma.user({ email });
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  let passwordMatch
+  user && (passwordMatch = await bcrypt.compare(password, user.password))
   if (!user || !passwordMatch) {
     throw new AuthenticationError('Invalid Login.');
   }
@@ -46,11 +47,29 @@ async function login(_, { input }, { prisma }) {
   }
 }
 
-async function updateUser(_, args, { req, prisma }) {
-  // console.log('update = = = = = req = = = = = ', req)
+async function updateUser(_, { input }, { req, prisma }) {
   const id = getUserId(req);
-  res = await prisma.updateUser({
-    data: { ...args },
+  const { email, password } = input
+  const updates = {}
+  if (email) {
+    const emailTaken = await prisma.$exists.user({
+      email
+    })
+    if (emailTaken) {
+      throw new UserInputError('Email already in use.')
+    }
+    else {
+      updates["email"] = email
+    }
+  }
+
+  if (password) {
+    const hash = hashPassword(password)
+    updates["password"] = hash
+  }
+
+  const res = await prisma.updateUser({
+    data: { ...updates },
     where: {
       id,
     },
@@ -60,8 +79,6 @@ async function updateUser(_, args, { req, prisma }) {
 }
 
 async function deleteUser(_, __, { req, prisma }) {
-  // console.log('delete = = = = = req = = = = = ', req)
-
   const id = getUserId(req);
   return await prisma.deleteUser({ id });
 }
