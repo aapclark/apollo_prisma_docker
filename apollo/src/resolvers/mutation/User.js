@@ -47,7 +47,19 @@ async function login(_, { input }, { prisma }) {
   }
 }
 
-async function updateUser(_, { input }, { req, prisma }) {
+async function updateUserPassword(_, {input},{req, prisma}) {
+  const id = getUserId(req)
+  const {password} = input
+  
+  const hash = hashPassword(password)
+  const res = prisma.updateUser({
+  data: {password: hash},
+  where: {id}
+  })
+  return res
+}
+
+async function updateUserInfo(_, { input }, { req, prisma }) {
   const id = getUserId(req);
   const { email, password } = input
   const updates = {}
@@ -61,11 +73,6 @@ async function updateUser(_, { input }, { req, prisma }) {
     else {
       updates["email"] = email
     }
-  }
-
-  if (password) {
-    const hash = hashPassword(password)
-    updates["password"] = hash
   }
 
   const res = await prisma.updateUser({
@@ -88,6 +95,7 @@ async function deleteUser(_, __, { req, prisma }) {
 export default {
   register,
   login,
-  updateUser,
+  updateUserPassword,
+  updateUserInfo,
   deleteUser
 }
