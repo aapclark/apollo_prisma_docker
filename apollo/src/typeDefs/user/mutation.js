@@ -5,8 +5,11 @@ const mutationDefs = gql`
 		register(
 			input: RegistrationInput!
 			): AuthPayload!
-		updateUser(
-			input: UpdateUserInput
+		updateUserPassword(
+			input: UpdatePasswordInput!
+		): User!
+		updateUserInfo(
+			input: UpdateUserInfoInput!
 			): User!
 		deleteUser: User!
   }

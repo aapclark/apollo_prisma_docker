@@ -7,9 +7,7 @@ const client = getClient()
 
 beforeAll(async () => {
   await prisma.deleteManyUsers()
-
 })
-
 
 describe('User registration tests', () => {
   const input = {
@@ -49,12 +47,12 @@ describe('User registration tests', () => {
   })
 })
 
-// TODO -- update needs auth'd client
 describe('User update tests', () => {
   const input = {
     email: 'test_user3@mail.com',
     password: 'much_security_3'
   }
+
 
   it('Should reflect changes to user email in db', async () => {
 
@@ -114,14 +112,12 @@ describe('User update tests', () => {
 
 
 describe('User authorization tests', () => {
-
   const input = {
     email: 'test_user2@mail.com',
     password: 'much_security'
   }
 
   it('Should reject a request that does not provide proper authentication.', async () => {
-
     await expect(client.mutate({
       mutation: updateUserInfo,
       variables: {
@@ -156,7 +152,6 @@ describe('User authorization tests', () => {
     const userExists = await prisma.$exists.user({ id })
 
     expect(userExists).toBe(false)
-
   })
 
 })

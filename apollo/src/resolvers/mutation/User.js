@@ -1,7 +1,7 @@
 //  Mutations for User management
 import bcrypt from 'bcryptjs'
 import { generateToken, getUserId, hashPassword } from '../../auth'
-import { AuthenticationError } from 'apollo-server'
+import { AuthenticationError, UserInputError } from 'apollo-server'
 
 
 async function register(_, { input }, { prisma }) {
@@ -12,7 +12,7 @@ async function register(_, { input }, { prisma }) {
   })
 
   if (emailTaken) {
-    throw new AuthenticationError('Email already in use.')
+    throw new UserInputError('Email already in use.')
   }
 
   else {
@@ -33,7 +33,8 @@ async function register(_, { input }, { prisma }) {
 async function login(_, { input }, { prisma }) {
   const { email, password } = input
   const user = await prisma.user({ email });
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  let passwordMatch
+  user && (passwordMatch = await bcrypt.compare(password, user.password))
   if (!user || !passwordMatch) {
     throw new AuthenticationError('Invalid Login.');
   }
@@ -46,24 +47,45 @@ async function login(_, { input }, { prisma }) {
   }
 }
 
-async function updateUser(_, { input }, { req, prisma }) {
-  // console.log('update = = = = = req = = = = = ', req)
-  // console.log('update = = = = = args = = = = = ', args)
+async function updateUserPassword(_, {input},{req, prisma}) {
+  const id = getUserId(req)
+  const {password} = input
+  
+  const hash = hashPassword(password)
+  const res = prisma.updateUser({
+  data: {password: hash},
+  where: {id}
+  })
+  return res
+}
 
+async function updateUserInfo(_, { input }, { req, prisma }) {
   const id = getUserId(req);
+  const { email, password } = input
+  const updates = {}
+  if (email) {
+    const emailTaken = await prisma.$exists.user({
+      email
+    })
+    if (emailTaken) {
+      throw new UserInputError('Email already in use.')
+    }
+    else {
+      updates["email"] = email
+    }
+  }
+
   const res = await prisma.updateUser({
-    data: { ...input },
+    data: { ...updates },
     where: {
       id,
     },
   })
-  // console.log('res', res)
+
   return res
 }
 
 async function deleteUser(_, __, { req, prisma }) {
-  // console.log('delete = = = = = req = = = = = ', req)
-
   const id = getUserId(req);
   return await prisma.deleteUser({ id });
 }
@@ -73,6 +95,7 @@ async function deleteUser(_, __, { req, prisma }) {
 export default {
   register,
   login,
-  updateUser,
+  updateUserPassword,
+  updateUserInfo,
   deleteUser
 }
