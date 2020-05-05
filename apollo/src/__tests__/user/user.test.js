@@ -1,6 +1,6 @@
 import { prisma } from '../../generated/prisma-client'
 import { getClient, getAuthenticatedClient } from '../utils/getClient'
-import { registerUser, updateUser, login, deleteUser } from '../queries'
+import { registerUser, updateUserInfo, updateUserPassword, login, deleteUser } from '../queries'
 
 const client = getClient()
 
@@ -56,7 +56,7 @@ describe('User update tests', () => {
     password: 'much_security_3'
   }
 
-  it('Should reflect changes to user data in db', async () => {
+  it('Should reflect changes to user email in db', async () => {
 
     const { data } = await client.mutate({
       mutation: registerUser,
@@ -66,18 +66,49 @@ describe('User update tests', () => {
     const authenticatedClient = await getAuthenticatedClient(token)
 
     const newUserInfo = {
-      email: 'updated_password3@mail.com'
+      email: 'updated_user3@mail.com'
     }
 
 
     await authenticatedClient.mutate({
-      mutation: updateUser,
+      mutation: updateUserInfo,
       variables: { ...newUserInfo }
     })
 
     const user = await prisma.user({ id })
 
     expect(user.email).toBe(newUserInfo.email)
+  })
+
+  it('Should accept updated password', async () => {
+    const credentials = {
+      email: 'updated_user3@mail.com',
+      password: "much_security_3"
+    }
+    const {data} = await client.mutate({
+    mutation: login,
+    variables: {
+      ...credentials
+      }
+    })
+    const {data: {login:{token, user:{id}}}} = data
+    const authenticatedClient = await getAuthenticatedClient(token)
+    const newUserInfo = {
+      password: 'new_nifty_password'
+    }
+    await authenticatedClient.mutate({
+      mutation: updateUserPassword,
+      variables: {...newUserInfo}
+    })
+    const newLogin = await client.mutate({
+      mutation: login,
+      variables: {
+      email: credentials.email,
+      ...newUserInfo
+      }
+    }) 
+    console.log(`newLogin`, newLogin)
+   
   })
 })
 
@@ -92,7 +123,7 @@ describe('User authorization tests', () => {
   it('Should reject a request that does not provide proper authentication.', async () => {
 
     await expect(client.mutate({
-      mutation: updateUser,
+      mutation: updateUserInfo,
       variables: {
         email: 'rejected_email@mail.com',
         password: 'rejected_password'
