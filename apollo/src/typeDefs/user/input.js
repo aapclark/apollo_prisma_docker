@@ -5,10 +5,11 @@ const inputDefs = gql`
 		email: String!
 		password: String!
 	}
-
-	input UpdateUserInput {
+	input UpdatePasswordInput {
+		password: String!
+	}
+	input UpdateUserInfoInput {
 		email: String
-		password: String
 	}
 `
 
