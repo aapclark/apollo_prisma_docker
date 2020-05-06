@@ -1,7 +1,7 @@
-import Mutation from './mutation'
-import Query from './Query'
+// new approach: piece together each sub directory and export under resolvers
+import authResolvers from './auth'
+import userResolvers from './user'
 
-export default {
-  Mutation,
-  Query
-}
+const resolvers = [authResolvers, userResolvers]
+
+export default resolvers
