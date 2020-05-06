@@ -4,6 +4,7 @@ The structure of the resolvers directory is meant to mirror that of the `typeDef
 
 The `_scaffold_` directory provides an example of the structure of each subtype of resolver.
 
+
 The structure is as follows:
 
 ```
