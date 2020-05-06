@@ -1,4 +1,4 @@
-import { bcrypt } from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import { generateToken, getUserId, hashPassword } from '../../auth'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 
