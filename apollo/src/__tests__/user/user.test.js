@@ -89,7 +89,9 @@ describe('User update tests', () => {
       ...credentials
       }
     })
-    const {data: {login:{token, user:{id}}}} = data
+    console.log('data after login', data)
+    const { login: { token, user: { id } } } = data
+    console.log(token, id)
     const authenticatedClient = await getAuthenticatedClient(token)
     const newUserInfo = {
       password: 'new_nifty_password'
@@ -98,14 +100,13 @@ describe('User update tests', () => {
       mutation: updateUserPassword,
       variables: {...newUserInfo}
     })
-    const newLogin = await client.mutate({
+    await client.mutate({
       mutation: login,
       variables: {
       email: credentials.email,
       ...newUserInfo
       }
     }) 
-    console.log(`newLogin`, newLogin)
    
   })
 })
