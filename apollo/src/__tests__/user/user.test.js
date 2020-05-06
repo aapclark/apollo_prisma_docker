@@ -89,9 +89,7 @@ describe('User update tests', () => {
       ...credentials
       }
     })
-    console.log('data after login', data)
     const { login: { token, user: { id } } } = data
-    console.log(token, id)
     const authenticatedClient = await getAuthenticatedClient(token)
     const newUserInfo = {
       password: 'new_nifty_password'
