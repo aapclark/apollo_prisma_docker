@@ -16,12 +16,13 @@ export const registerUser = gql`
     }
   }
   `
-export const updateUser = gql`
-  mutation updateUser($email: String, $password: String) {
-    updateUser(
+export const updateUserInfo = gql`
+  mutation updateUserInfo(
+      $email: String
+      ) {
+    updateUserInfo(
       input: {
         email: $email
-        password: $password
       }
     ) {
       id
@@ -58,3 +59,18 @@ export const deleteUser = gql`
       }
     }
   `
+  
+export const updateUserPassword = gql`
+  mutation updateUserPassword(
+      $password: String!
+      ){
+    updateUserPassword(
+      input: {
+        password: $password
+      }
+    ) {
+      id
+      email
+    }
+  }
+`
