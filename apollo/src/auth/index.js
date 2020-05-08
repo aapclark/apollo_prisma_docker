@@ -54,28 +54,3 @@ export function getUserId(request) {
   }
   throw new AuthenticationError('Not Authenticated.')
 }
-
-/*
-  Checks the email stored in the token against the saved admin email in an .env file.
-*/
-
-export function validToken(context) {
-  const Authorization = context.request.get('Authorization')
-  if (Authorization) {
-    const token = Authorization.replace('Bearer ', '')
-    return jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return {
-          token: "",
-          valid: false
-        }
-      } else {
-        return {
-          token: generateToken(decoded),
-          valid: true
-        }
-      }
-    })
-  }
-  throw new Error('Not Authenticated')
-}

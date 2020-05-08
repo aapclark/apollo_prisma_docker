@@ -1,32 +1,32 @@
 import bcrypt from 'bcryptjs'
-import { generateToken, getUserId, hashPassword } from '../../auth'
+import { generateToken, hashPassword } from '../../auth'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 
 const Mutation = {
 	register: async function (_, { input }, { prisma }) {
-	const { email, password } = input
-	const emailTaken = await prisma.$exists.user({
-		email
+		const { email, password } = input
+		const emailTaken = await prisma.$exists.user({
+			email
 		})
 
-	if (emailTaken) {
-		throw new UserInputError('Email already in use.')
+		if (emailTaken) {
+			throw new UserInputError('Email already in use.')
 		}
 
-	else {
-		const hash = hashPassword(password)
-		const user = await prisma.createUser({
-			email,
-			password: hash
+		else {
+			const hash = hashPassword(password)
+			const user = await prisma.createUser({
+				email,
+				password: hash
 			})
-		const token = generateToken(user)
+			const token = generateToken(user)
 
-		return {
-			token,
-			user
+			return {
+				token,
+				user
 			}
 		}
-	}, 
+	},
 
 	login: async function (_, { input }, { prisma }) {
 		const { email, password } = input
