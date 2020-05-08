@@ -3,8 +3,6 @@ Apollo Server and Prisma 1.34 in Docker
 
 This is a boilerplate and scaffolding repository for an Apollo Server, Prisma stack in a Docker container.
 
-This is a work in progress and certain features have yet to be completed.
-
 # Getting Started
 
 - Clone this repository.
