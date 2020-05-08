@@ -99,24 +99,26 @@ GraphQL operations can be made at endpoint `localhost:5502` using a GraphQL Clie
 
 ```
 ├── apollo
-│   ├── schema
-│   └── src
-│       ├── __tests__
-│       │   ├── config
-│       │   ├── user
-│       │   └── utils
-│       ├── auth
-│       ├── context
-│       ├── generated
-│       │   └── prisma-client
-│       ├── plugins
-│       │   └── apolloLogger
-│       ├── resolvers
-│       │   └── mutation
-│       └── typeDefs
-│           ├── __scaffold__
-│           ├── auth
-│           └── user
+│   ├── schema
+│   └── src
+│       ├── __tests__
+│       │   ├── config
+│       │   ├── queries
+│       │   ├── user
+│       │   └── utils
+│       ├── auth
+│       ├── context
+│       ├── generated
+│       │   └── prisma-client
+│       ├── plugins
+│       │   └── apolloLogger
+│       ├── resolvers
+│       │   ├── auth
+│       │   ├── general
+│       │   └── user
+│       └── typeDefs
+│           ├── auth
+│           └── user
 ├── configuration
 ├── prisma
 └── utils
@@ -131,7 +133,7 @@ Apollo Server resides in the /apollo directory.
     - `/context` contains function which builds context. If context-level authentication is desired, it can be implemented here.
     - `/generated` contains the generated Prisma Client
     - `/plugins` contains any custom plugin used by Apollo Server, like apolloLogger.
-    - `/resolvers` structure is currently a work in progress and will be updated with a structure similar to `typeDefs`
+    - `/resolvers` structure is currently a work in progress and is structured like `typeDefs`. Each subfolder represents a concern containing query and mutation resolvers.
     - `/typeDefs` contains GraphQL type definitions that Apollo Server can interpret. Each type is represented in a sub-folder which contains input, type, query, and mutation definitions as well as an index to import each folder's definitions and export as default.
 
 #### Prisma
