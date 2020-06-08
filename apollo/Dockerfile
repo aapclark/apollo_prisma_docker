@@ -16,9 +16,7 @@ COPY ./src ./
 COPY .babelrc ./
 COPY package.json ./
 
-
 RUN npx prisma generate --schema=./prisma/schema.prisma 
-# RUN ls
 
 
 CMD ["NODE", "index.js"]
