@@ -33,9 +33,7 @@
   "homepage": "https://github.com/aapclark/apollo_prisma_docker#readme",
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.9.0",
-    "jest": "^25.2.4",
-    "nodemon": "^2.0.2",
-    "supertest": "^4.0.2",
+    "@prisma/cli": "^2.0.0-beta.9",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -45,7 +43,10 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
-    "prettier": "^2.0.4"
+    "jest": "^25.2.4",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.4",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@babel/core": "^7.9.0",
