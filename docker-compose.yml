@@ -4,45 +4,29 @@ services:
     build:
       context: ./apollo
       dockerfile: Dockerfile
-
     environment:
-      PRISMA_ENDPOINT: '${PRISMA_URL}:${PRISMA_PORT}/${PRISMA_SERVICE_NAME}/${PRISMA_STAGE}'
-      PRISMA_SECRET: '${PRISMA_SECRET}'
+      # PRISMA_ENDPOINT: '${PRISMA_URL}:${PRISMA_PORT}/${PRISMA_SERVICE_NAME}/${PRISMA_STAGE}'
+      # PRISMA_SECRET: '${PRISMA_SECRET}'
       APOLLO_PORT: '${APOLLO_PORT}'
       APOLLO_TEST_PORT: ${APOLLO_TEST_PORT}
       JWT_SECRET: '${JWT_SECRET}'
-      PRISMA_MANAGEMENT_API_SECRET: '${PRISMA_MANAGEMENT_API_SECRET}'
+      DB_URL: '${DB_URL}'
     volumes:
       - ./apollo/src:/app/src
     ports:
       - '${APOLLO_PORT:-8000}:${APOLLO_PORT:-8000}'
     depends_on:
-      - prisma
+      - db
     command: sh -c "npm run ${NPM_COMMAND}"
-  prisma:
-    image: prismagraphql/prisma:1.34.10
-    restart: always
-    ports:
-      - '${PRISMA_PORT:-4454}:${PRISMA_PORT:-4454}'
+  db:
+    image: postgres:12.3
     environment:
-      PRISMA_CONFIG: |
-        managementApiSecret: ${PRISMA_MANAGEMENT_API_SECRET}
-        secret: ${PRISMA_SECRET}
-        port: ${PRISMA_PORT:-4454}
-        databases:
-          default:
-            connector: postgres
-            host: postgres
-            port: 5432
-            user: ${PG_USER}
-            password: ${PG_PASSWORD}
-            migrations: true
-  postgres:
-    image: postgres:12.2
-    environment:
+      POSTGRES_DB: 'prisma_db'
       POSTGRES_USER: ${PG_USER:-prisma}
       POSTGRES_PASSWORD: ${PG_PASSWORD:-prisma}
     volumes:
-      - postgres:/var/lib/postgresql-prisma/data
+      - db_data:/var/lib/prisma_db/data
+    ports:
+      - 5432:5432
 volumes:
-  postgres: ~
+  db_data:
