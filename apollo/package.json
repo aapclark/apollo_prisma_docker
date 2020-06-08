@@ -52,13 +52,13 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "@prisma/client": "^2.0.0-beta.9",
     "apollo-boost": "^0.4.7",
     "apollo-server": "^2.11.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "env-cmd": "^10.1.0",
     "jsonwebtoken": "^8.5.1",
-    "prisma-client-lib": "^1.34.10",
     "stripe": "^8.38.0"
   }
 }
