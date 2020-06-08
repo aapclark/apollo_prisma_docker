@@ -1,5 +1,5 @@
 # Apollo and Prisma in Docker.
-Apollo Server and Prisma 1.34 in Docker
+Apollo Server and Prisma 1.34 in Docker. This branch, `prisma1.24` will remain as an example. New contributions will implement Prisma2.
 
 This is a boilerplate and scaffolding repository for an Apollo Server, Prisma stack in a Docker container.
 
