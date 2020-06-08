@@ -11,7 +11,6 @@ services:
       APOLLO_PORT: '${APOLLO_PORT}'
       APOLLO_TEST_PORT: ${APOLLO_TEST_PORT}
       JWT_SECRET: '${JWT_SECRET}'
-      PRISMA_MANAGEMENT_API_SECRET: '${PRISMA_MANAGEMENT_API_SECRET}'
     volumes:
       - ./apollo/src:/app/src
     ports:
@@ -20,7 +19,7 @@ services:
       - prisma
     command: sh -c "npm run ${NPM_COMMAND}"
   postgres:
-    image: postgres:12.2
+    image: postgres:12.3
     environment:
       POSTGRES_USER: ${PG_USER:-prisma}
       POSTGRES_PASSWORD: ${PG_PASSWORD:-prisma}
