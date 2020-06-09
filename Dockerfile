@@ -16,6 +16,5 @@ COPY ./src ./
 COPY .babelrc ./
 COPY package.json ./
 
-RUN npx prisma generate --schema=./prisma/schema.prisma 
 
 EXPOSE 5502
