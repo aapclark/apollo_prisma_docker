@@ -2,7 +2,7 @@ version: '3'
 services:
   apollo:
     build:
-      context: ./apollo
+      context: ./
       dockerfile: Dockerfile
     environment:
       APOLLO_PORT: '${APOLLO_PORT}'
