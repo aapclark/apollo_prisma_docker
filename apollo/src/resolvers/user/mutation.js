@@ -10,7 +10,7 @@ const Mutation = {
 		if (email) {
 			const emailTaken = await prisma.user.count({
 				where: {
-					email
+					email: email
 				}
 			})
 			if (emailTaken) {
@@ -23,7 +23,7 @@ const Mutation = {
 		const res = await prisma.user.update({
 			data: { ...updates },
 			where: {
-				id
+				id: id
 			}
 		})
 		return res
@@ -45,7 +45,11 @@ const Mutation = {
 	},
 	async deleteUser(_, __, { req, prisma }) {
 		const id = getUserId(req)
-		return await prisma.user.delete({ id })
+		return await prisma.user.delete({
+			where: {
+				id: id
+			}
+		})
 	}
 }
 
