@@ -35,7 +35,9 @@ const Mutation = {
 	async login(_, { input }, { prisma }) {
 		const { email, password } = input
 		const user = await prisma.user.findOne({
-			email
+			where: {
+				email: email
+			}
 		})
 		let passwordMatch
 		user && (passwordMatch = await bcrypt.compare(password, user.password))
