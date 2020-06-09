@@ -3,10 +3,12 @@ import { generateToken, hashPassword } from '../../auth'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 
 const Mutation = {
-	register: async function (_, { input }, { prisma }) {
+	async register(_, { input }, { prisma },) {
 		const { email, password } = input
-		const emailTaken = await prisma.$exists.user({
-			email
+		const emailTaken = await prisma.user.count({
+			where: {
+				email: email
+			}
 		})
 
 		if (emailTaken) {
@@ -15,9 +17,11 @@ const Mutation = {
 
 		else {
 			const hash = hashPassword(password)
-			const user = await prisma.createUser({
-				email,
-				password: hash
+			const user = await prisma.user.create({
+				data: {
+					email,
+					password: hash
+				}
 			})
 			const token = generateToken(user)
 
@@ -28,9 +32,9 @@ const Mutation = {
 		}
 	},
 
-	login: async function (_, { input }, { prisma }) {
+	async login(_, { input }, { prisma }) {
 		const { email, password } = input
-		const user = await prisma.user({
+		const user = await prisma.user.findOne({
 			email
 		})
 		let passwordMatch
