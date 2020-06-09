@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs'
 
 import { AuthenticationError, UserInputError } from 'apollo-server'
 
-const JWT_SECRET = process.env.PRISMA_SECRET
+const JWT_SECRET = process.env.JWT_SECRET
 
 /*
   @param {Object} user - user info pulled from database
@@ -13,6 +13,7 @@ const JWT_SECRET = process.env.PRISMA_SECRET
 */
 export function generateToken(user) {
 
+  console.log('secret: ', JWT_SECRET)
   const payload = {
     id: user.id,
     email: user.email,
