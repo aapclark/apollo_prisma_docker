@@ -5,8 +5,6 @@ services:
       context: ./apollo
       dockerfile: Dockerfile
     environment:
-      # PRISMA_ENDPOINT: '${PRISMA_URL}:${PRISMA_PORT}/${PRISMA_SERVICE_NAME}/${PRISMA_STAGE}'
-      # PRISMA_SECRET: '${PRISMA_SECRET}'
       APOLLO_PORT: '${APOLLO_PORT}'
       APOLLO_TEST_PORT: ${APOLLO_TEST_PORT}
       JWT_SECRET: '${JWT_SECRET}'

@@ -1,8 +1,6 @@
 const Query = {
-  users: async function (_, args, { prisma }, __) {
-    console.log('prisma', prisma)
+  async users(_, __, { prisma },) {
     return await prisma.user.findMany()
-
   }
 }
 

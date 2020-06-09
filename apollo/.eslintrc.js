@@ -9,7 +9,8 @@ module.exports = {
     node: true,
   },
   rules: {
-    quotes: ['error', 'backtick', { avoidEscape: true }],
+    semi: ['error', 'never'],
+    quotes: ['error', 'backticks', 'single', { avoidEscape: true }],
     'react/prop-types': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
