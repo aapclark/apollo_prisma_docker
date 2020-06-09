@@ -1,4 +1,4 @@
-FROM node:13.10.1-alpine as deps
+FROM node:13.5.0-alpine as deps
 
 WORKDIR /app
 COPY package.json  ./
@@ -18,6 +18,4 @@ COPY package.json ./
 
 RUN npx prisma generate --schema=./prisma/schema.prisma 
 
-
-CMD ["NODE", "index.js"]
 EXPOSE 5502
