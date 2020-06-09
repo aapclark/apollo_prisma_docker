@@ -1,7 +1,6 @@
 const Query = {
-  users: async function (_, args, { prisma }, __) {
+  async users(_, _, { prisma }, ____) {
     return await prisma.user.findMany()
-
   }
 }
 

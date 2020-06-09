@@ -11,7 +11,6 @@ const server = new ApolloServer({
   context: createContext,
   plugins: [apolloLogger],
   cors: true,
-  ssl: false,
 })
 
 export default server
