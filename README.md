@@ -22,41 +22,20 @@ This package attempts to be flexible in the ways the Apollo service can be run. 
 
 ## Environment Variables
 
-<details>
-  <summary>Prisma</summary>
+  #### Universal ENVs
 
-  * `PRISMA_ENDPOINT` | Specifies the full Prisma endpoint to which Prisma CLI can execute deploy commands. 
-  * `PRISMA_URL` | Component of following four ENV variables. Used by `docker-compose` to specify Prisma's endpoint within Docker container.
-  * `PRISMA_PORT`
-  * `PRISMA_SERVICE_NAME`
-  * `PRISMA_STAGE`
-  * `PRISMA_SECRET` | Used to authenticate requests to Prisma Client
-  * `PRISMA_MANAGEMENT_API_SECRET` | Optional, but should also be excluded from Docker and Prisma configurations. This ENV provides a secret for Prisma's Management API.
-</details>
+  * `DB_URL` | Specifies the URL of the database. This is formatted so: `postgresql://[USER]:[PASSWORD]@[DOCKER_DB_SERVICE_NAME]:[POSTGRES_PORT]/[DB_NAME]`
+  * `JWT_SECRET` | Secret used for generating and evaluating Authorization tokens.
+  * `APOLLO_PORT` | Specifies the port at which the Apollo Server listens.
 
-<details> 
-  <summary>Postgres</summary> 
+
+  #### Docker-Specific ENVs
 
   * `PG_USER` | Specifies the username of the Postgres database.
   * `PG_PASSWORD` | Specifies the password for the Postgres database.
-</details>
-<details> 
-  <summary>Apollo Server</summary>
-
   * `NPM_COMMAND` | Provides the command that Docker runs on Apollo service in `docker-compose`.
-  * `JWT_SECRET` | Secret used for generating and evaluating Authorization tokens.
-  * `APOLLO_PORT` | Specifies the port at which the Apollo Server listens.
   * `APOLLO_TEST_PORT` | Specifies the port at which the Apollo Server listens during testing scripts.
-</details>
 
-
-
-### Docker, Prisma, and Apollo Server
-
-
-To achieve connectivity between Apollo Server and Prisma inside the same Docker container, Apollo must know that the endpoint is not found at `http://localhost` but `http://prisma`. For this reason, there are five ENVs relevant to Prisma's endpoint. Four are used by Docker and one is used by Prisma CLI. `PRISMA_URL`, `PRISMA_PORT`, `PRISMA_SERVICE_NAME`, and `PRISMA_STAGE` are used by `docker-compose.yml` to piece together a full, relevant *local*, URL that Apollo can use to communicate with its sibling service in the Docker container.
-
-The separation of ENVs is to allow the execution of `prisma deploy` without having to update ENV files each time from `localhost` to `prisma`.
 
 ## Loading ENV Files
 
@@ -135,7 +114,7 @@ Apollo Server resides in the /apollo directory.
     - `/typeDefs` contains GraphQL type definitions that Apollo Server can interpret. Each type is represented in a sub-folder which contains input, type, query, and mutation definitions as well as an index to import each folder's definitions and export as default.
 
 #### Prisma
-Prisma configuration and datamodel resides in the /prisma directory.
+Prisma configuration and datamodel resides in the /apollo/prisma directory.
 
 #### Others
 ENV files can be stored in `/configuration`. The script to write ENV files to root .env is located in `/utils`

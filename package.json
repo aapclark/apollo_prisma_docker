@@ -1,34 +1,63 @@
 {
-  "name": "apollo_prisma_docker",
-  "version": "0.0.1",
-  "description": "Boilerplate and scaffolding repository for Apollo, Prisma, Docker stack.",
+  "name": "quality-hub-core-be",
+  "version": "1.0.0",
+  "description": "Apollo Server for apollo-prisma-docker.",
+  "main": "index.js",
   "scripts": {
-    "beforeRun": "docker-compose stop",
-    "env:dev": "cd utils && python3 env_script.py ../configuration/development.env",
-    "env:test": "cd utils && python3 env_script.py ../configuration/test.env && cd ..",
-    "dev:docker:build": "npm run env:dev && docker-compose up --build",
-    "dev:docker": "npm run beforeRun && npm run env:dev && docker-compose up",
-    "dev:local": "npm run beforeRun && npm run env:dev && docker-compose up -d prisma postgres &&  npm run apollo:dev",
-    "apollo:dev": "cd apollo && npm run development:local",
-    "apollo:test": "cd apollo && npm run test:local",
-    "test:docker:build": "npm run beforeRun && npm run env:test && docker-compose up --build",
-    "test:docker": "npm run beforeRun && npm run env:test && docker-compose up",
-    "test:local": "npm run beforeRun && npm run env:test && docker-compose up -d postgres prisma && npm run apollo:test"
+    "test": "jest --runInBand --watchAll",
+    "test:local": "env-cmd -f ../configuration/test.env jest --runInBand --watchAll",
+    "server": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "development": "nodemon --exec babel-node src/index.js",
+    "development:local": "env-cmd -f ../configuration/development.env nodemon --exec babel-node src/index.js"
+  },
+  "jest": {
+    "globalSetup": "./src/__tests__/config/globalSetup.js",
+    "globalTeardown": "./src/__tests__/config/globalTeardown.js",
+    "testPathIgnorePatterns": [
+      "src/__tests__/config/",
+      "src/__tests__/utils/",
+      "src/__tests__/queries/"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aapclark/apollo_prisma_docker.git"
   },
-  "keywords": [
-    "apollo",
-    "prisma",
-    "docker"
-  ],
+  "keywords": [],
   "author": "@aapclark",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/aapclark/apollo_prisma_docker/issues"
   },
   "homepage": "https://github.com/aapclark/apollo_prisma_docker#readme",
-  "dependencies": {}
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@prisma/cli": "^2.0.0-beta.9",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.4",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/runtime": "^7.10.2",
+    "apollo-boost": "^0.4.9",
+    "apollo-server": "^2.14.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
+    "jsonwebtoken": "^8.5.1"
+  }
 }
