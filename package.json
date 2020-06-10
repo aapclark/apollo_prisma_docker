@@ -10,10 +10,8 @@
     "dev:docker:build": "npm run env:dev && docker-compose up --build",
     "test:docker:build": "npm run beforeRun && npm run env:test && docker-compose up --build",
     "test:docker": "npm run beforeRun && npm run env:test && docker-compose up",
-    "test:local": "npm run beforeRun && npm run env:test && docker-compose up -d postgres && npm run apollo:test",
-    "apollo:test": "env-cmd jest --runInBand --watchAll",
-    "server": "nodemon src/index.js",
-    "start": "node src/index.js",
+    "test:local": "npm run beforeRun && npm run env:test && docker-compose up -d db && npm run apollo:test",
+    "apollo:test": "env-cmd -f ../configurtion/test.env jest --runInBand --watchAll",
     "development": "nodemon --exec babel-node src/index.js",
     "development:local": "env-cmd -f ../configuration/development.env nodemon --exec babel-node src/index.js"
   },
