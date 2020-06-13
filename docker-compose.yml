@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   apollo:
     build:
@@ -10,12 +10,17 @@ services:
       JWT_SECRET: '${JWT_SECRET}'
       DB_URL: '${DB_URL}'
     volumes:
-      - ./apollo/src:/app/src
+      - type: volume
+        source: apollo
+        target: /app
+      # - ./src:/app/src
     ports:
       - '${APOLLO_PORT:-8000}:${APOLLO_PORT:-8000}'
     depends_on:
       - db
-    command: sh -c "npm run ${NPM_COMMAND}"
+    # command: sh -c "npm run ${NPM_COMMAND}"
+    command: sh -c "npm run prisma:mgs && npm run prisma:mgu && npm run prisma:gen && npm run ${NPM_COMMAND}"
+
   db:
     image: postgres:12.3
     environment:
@@ -28,3 +33,4 @@ services:
       - 5432:5432
 volumes:
   db_data:
+  apollo:
