@@ -14,8 +14,7 @@
     "apollo:test": "env-cmd -f ../configurtion/test.env jest --runInBand --watchAll",
     "development": "ls && nodemon --exec babel-node src/index.js",
     "development:local": "env-cmd -f ../configuration/development.env nodemon --exec babel-node src/index.js",
-    "prisma:mgs": "npx prisma migrate save --experimental --schema=./prisma/schema.prisma",
-    "prisma:mgu": "npx prisma migrate up --experimental --schema=./prisma/schema.prisma ",
+    "prisma:m": "npx prisma migrate dev --preview-feature",
     "prisma:gen": "npx prisma generate --schema=./prisma/schema.prisma"
   },
   "jest": {

@@ -16,8 +16,4 @@ COPY ./prisma ./prisma/
 COPY ./src ./src/
 COPY .babelrc ./
 
-# RUN cd prisma && npx prisma migrate save --experimental 
-# RUN cd prisma && npx prisma migrate up --experimental 
-# RUN cd prisma && npx prisma generate 
-
 EXPOSE 5502
